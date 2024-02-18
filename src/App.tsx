@@ -8,9 +8,8 @@ function App() {
   const [userToken, setUserToken] = useState<string>("");
 
   const user = {
-    username: "Anicoder1",
-    email: "anime1@anime.com",
-    password: "password1",
+    username: "admin_andre",
+    password: "Us3rB00k$"
   };
 
   const handleLogin = async (user: UserLogin) => {

@@ -1,7 +1,8 @@
 import axios from "axios";
 
-const PROD_API_URL = "https://soul-quotes-api.fly.dev";
+const FLY_API_URL = "https://soul-quotes-api.fly.dev";
 const DEV_API_URL = "http://localhost:5000";
+
 export const API_URL = DEV_API_URL;
 
 export async function serverTest() {
