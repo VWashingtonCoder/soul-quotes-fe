@@ -14,7 +14,7 @@ export async function fetchUsers() {
   }
 }
 
-export async function createUser(user: UserInput) {
+export async function postNewUser(user: UserInput) {
   try {
     const response = await axios.post(`${usersApiUrl}/create`, user);
     return response.data;
