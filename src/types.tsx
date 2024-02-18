@@ -7,13 +7,11 @@ export interface User {
 
 export interface UserInput {
     username: string;
+    email: string;
     password: string;
 }
 
-export interface UserResponse {
-    user: User;
-    token: string;
-}
+export type UserLogin = Omit<UserInput, "email">;
 
 export interface Quote {
     id?: number;
@@ -24,12 +22,8 @@ export interface Quote {
     creatorId: string;
 }
 
-export interface QuoteInput {
-    quoteKey?: string;
-    text: string;
-    author: string;
-    category: string;
-}
+export type QuoteInput = Omit<Quote, "id" | "creatorId">;
+
 
 export interface Favorite {
     id?: number;
