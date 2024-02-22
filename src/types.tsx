@@ -28,6 +28,6 @@ export type QuoteInfo = Omit<QuoteInput, "quoteKey">;
 
 export interface Favorite {
   id?: number;
-  quoteId: number;
-  userId: number;
+  quoteId: string;
+  userId: string;
 }

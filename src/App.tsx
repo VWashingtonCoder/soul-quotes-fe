@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import { postNewUser, loginUser } from "./api/api-users";
 import { fetchQuotes, postNewQuote, deleteQuote } from "./api/api-quotes";
-import { UserInput, UserLogin, QuoteInfo, QuoteInput } from "./types";
-import { fetchFavorites } from "./api/api-favorites";
+import { UserInput, UserLogin, QuoteInfo, QuoteInput, Quote } from "./types";
+import { fetchFavorites, postFavorite } from "./api/api-favorites";
 import "./App.css";
 
 function App() {
@@ -63,6 +63,16 @@ function App() {
     });
   };
 
+  const addFavorite = async (quoteKey: string, username: string, token: string) => {
+    const favorite = {
+      quoteId: quoteKey,
+      userId: username,
+    };
+
+    await postFavorite(favorite, token).then((response) => {
+      console.log(response);
+    });
+  };  
 
   // function tests
   useEffect(() => {
@@ -73,6 +83,7 @@ function App() {
     // createQuote(newQuote, userToken);
     // trashQuote(1, userToken);
     // getUserFavorites(userToken);
+    // addFavorite("love-4", "admin_andre", userToken);
   }, []);
 
 
