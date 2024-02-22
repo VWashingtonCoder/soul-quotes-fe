@@ -49,12 +49,32 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
   };
 
   const loginActiveUser = async (user: UserLogin) => {
-    await loginUser(user).then((response) => {
-      const { username, token } = response;
-      setActiveUser({ username, token });
-      localStorage.setItem("activeUser", JSON.stringify(response));
-    });
-  }
+    await loginUser(user)
+      .then((response) => {
+        const loggedInUser = {
+          username: response.user.username,
+          token: response.token,
+        };
+        setActiveUser(loggedInUser);
+        localStorage.setItem("activeUser", JSON.stringify(loggedInUser));
+        toast.success(`Welcome back ${loggedInUser.username}!`);
+      })
+      .catch((err) => {
+        const errorResponse = err.response.data.error;
+        toast.error(errorResponse);
+      });
+  };
+
+  const createUser = async (user: UserInput) => {
+    await postNewUser(user)
+      .then(() => {
+        toast.success("User created successfully");
+      })
+      .catch((err) => {
+        const errorResponse = err.response.data.error;
+        toast.error(errorResponse);
+      });
+  };
 
   useEffect(() => {
     checkForLocalUser();
@@ -65,6 +85,7 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
     quoteList,
     userFavorites,
     loginActiveUser,
+    createUser,
   };
 
   return (
