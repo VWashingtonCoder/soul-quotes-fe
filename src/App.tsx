@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { postNewUser, loginUser } from "./api/api-users";
 import { fetchQuotes, postNewQuote, deleteQuote } from "./api/api-quotes";
 import { UserInput, UserLogin, QuoteInfo, QuoteInput } from "./types";
+import { fetchFavorites } from "./api/api-favorites";
 import "./App.css";
 
 function App() {
@@ -38,25 +39,42 @@ function App() {
     });
   };
 
-  const createQuote = async (quoteInfo: QuoteInfo) => {
+  const createQuote = async (quoteInfo: QuoteInfo, token: string) => {
     const quote: QuoteInput = {
       ...quoteInfo,
       quoteKey: "funny-37",
     };
 
-    await postNewQuote(quote, userToken).then((response) => {
+    await postNewQuote(quote, token).then((response) => {
       console.log(response);
     });
   };
 
-  const trashQuote = async (quoteId: number) => {
-    await deleteQuote(quoteId, userToken).then((response) => {
+  const trashQuote = async (quoteId: number, token: string) => {
+    await deleteQuote(quoteId, token).then((response) => {
       console.log(response);
     });
   };
+
+  // favorites api handlers
+  const getUserFavorites = async (token: string) => {
+    await fetchFavorites(token).then((response) => {
+      console.log(response);
+    });
+  };
+
 
   // function tests
-  useEffect(() => {}, []);
+  useEffect(() => {
+    // createUser(user);
+    // handleLogin(user);
+    console.log(`userToken: ${userToken}`);
+    // getQuotes();
+    // createQuote(newQuote, userToken);
+    // trashQuote(1, userToken);
+    // getUserFavorites(userToken);
+  }, []);
+
 
   return (
     <>
