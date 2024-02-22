@@ -31,3 +31,17 @@ export async function postFavorite(favorite: Favorite, token: string) {
     throw error;
   }
 }
+
+export async function deleteFavorite(favoriteId: number, token: string) {
+  try {
+    const response = await axios.delete(`${favoritesApiUrl}/${favoriteId}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    return response.data;
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+}
