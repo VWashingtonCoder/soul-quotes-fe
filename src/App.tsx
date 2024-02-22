@@ -1,12 +1,12 @@
 import { useEffect, useState } from "react";
 import { postNewUser, loginUser } from "./api/api-users";
 import { fetchQuotes, postNewQuote, deleteQuote } from "./api/api-quotes";
-import { UserInput, UserLogin, QuoteInfo, QuoteInput, Quote } from "./types";
 import {
   fetchFavorites,
   postFavorite,
   deleteFavorite,
 } from "./api/api-favorites";
+import { UserInput, UserLogin, QuoteInfo, QuoteInput, Quote } from "./types";
 import "./App.css";
 
 function App() {
@@ -23,18 +23,12 @@ function App() {
     category: "funny",
   };
 
-  // User api handlers
   const createUser = async (user: UserInput) => {
     await postNewUser(user).then((response) => {
       console.log(response);
     });
   };
 
-  const handleLogin = async (user: UserLogin) => {
-    await loginUser(user).then((response) => {
-      setUserToken(response.token);
-    });
-  };
 
   // Quote api handlers
   const getQuotes = async () => {
@@ -91,7 +85,6 @@ function App() {
   // function tests
   useEffect(() => {
     // createUser(user);
-    // handleLogin(user);
     // getQuotes();
     // createQuote(newQuote, userToken);
     // trashQuote(1, userToken);

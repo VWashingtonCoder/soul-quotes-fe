@@ -11,6 +11,11 @@ export interface UserInput {
   password: string;
 }
 
+export interface UserToken {
+  username: string;
+  token: string;
+}
+
 export type UserLogin = Omit<UserInput, "email">;
 
 export interface Quote {
