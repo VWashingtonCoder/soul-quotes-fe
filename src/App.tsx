@@ -13,11 +13,6 @@ function App() {
   // Set up for token use in other routes
   const [userToken, setUserToken] = useState<string>("");
 
-  const newUser = {
-    username: "Anicoder2",
-    email: "anime2@anime.com",
-    password: "password1",
-  };
   const user = {
     username: "admin_andre",
     password: "Us3rB00k$",
@@ -27,7 +22,7 @@ function App() {
     author: "admin_andre",
     category: "funny",
   };
-  
+
   const loginActiveUser = async (user: UserLogin) => {
     await loginUser(user)
       .then((response) => {
@@ -45,12 +40,6 @@ function App() {
   };
 
   // Quote api handlers
-  const getQuotes = async () => {
-    await fetchQuotes().then((response) => {
-      console.log(response);
-    });
-  };
-
   const createQuote = async (quoteInfo: QuoteInfo, token: string) => {
     const quote: QuoteInput = {
       ...quoteInfo,
@@ -98,8 +87,7 @@ function App() {
 
   // function tests
   useEffect(() => {
-    // loginActiveUser(user);
-    // getQuotes();
+    loginActiveUser(user);
     // createQuote(newQuote, userToken);
     // trashQuote(1, userToken);
     // getUserFavorites(userToken);

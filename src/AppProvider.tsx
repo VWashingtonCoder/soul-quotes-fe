@@ -40,12 +40,14 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
   const [quoteList, setQuoteList] = useState<Quote[]>([]);
   const [userFavorites, setUserFavorites] = useState<Favorite[]>([]);
 
+  const generateQuoteKey = (category: string) => {
+    return "";
+  };
+
   // User api handlers
   const checkForLocalUser = () => {
     const localUser = localStorage.getItem("activeUser");
-    if (localUser) {
-      setActiveUser(JSON.parse(localUser));
-    }
+    if (localUser) setActiveUser(JSON.parse(localUser));
   };
 
   const loginActiveUser = async (user: UserLogin) => {
@@ -76,6 +78,25 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
       });
   };
 
+  // Quote api handlers
+  const getQuotes = async () => {
+    await fetchQuotes()
+      .then((response) => {
+        setQuoteList(response.quotes);
+      })
+      .catch(() => {
+        toast.error("Failed to fetch quotes");
+      });
+  };
+
+  const createQuote = async (quoteInfo: QuoteInput, token: string) => {
+    const newQuote: Quote = {
+      ...quoteInfo,
+      quoteKey: generateQuoteKey(quoteInfo.category),
+      creatorId: activeUser?.username || "",
+    };
+  };
+
   useEffect(() => {
     checkForLocalUser();
   }, []);
@@ -86,6 +107,8 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
     userFavorites,
     loginActiveUser,
     createUser,
+    getQuotes,
+    createQuote,
   };
 
   return (
