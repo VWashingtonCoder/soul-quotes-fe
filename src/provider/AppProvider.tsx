@@ -8,14 +8,14 @@ import {
   QuoteInput,
   Quote,
   Favorite,
-} from "./types";
-import { postNewUser, loginUser } from "./api/api-users";
-import { fetchQuotes, postNewQuote, deleteQuote } from "./api/api-quotes";
+} from "../types";
+import { postNewUser, loginUser } from "../api/api-users";
+import { fetchQuotes, postNewQuote, deleteQuote } from "../api/api-quotes";
 import {
   fetchFavorites,
   postFavorite,
   deleteFavorite,
-} from "./api/api-favorites";
+} from "../api/api-favorites";
 import { toast } from "react-hot-toast";
 
 export interface AppContextInterface {
@@ -40,11 +40,22 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
   const [quoteList, setQuoteList] = useState<Quote[]>([]);
   const [userFavorites, setUserFavorites] = useState<Favorite[]>([]);
 
-  const generateQuoteKey = (category: string) => {
-    return "";
-  };
+  function generateQuoteKey(quotes: Quote[], category: string) {
+    console.log(quotes)
+    const categoryQuotes = quotes.filter(
+      (quote) => quote.category === category
+    );
 
-  // User api handlers
+    // console.log(categoryQuotes)
+
+    if (categoryQuotes.length === 0) return "";
+
+    const lastQuoteKey = categoryQuotes[categoryQuotes.length - 1].quoteKey;
+    const lastQuoteKeyNum = Number(lastQuoteKey.replace(`${category}-`, ""));
+    const newQuoteKey = `${category}-${lastQuoteKeyNum + 1}`;
+    return newQuoteKey;
+  }
+
   const checkForLocalUser = () => {
     const localUser = localStorage.getItem("activeUser");
     if (localUser) setActiveUser(JSON.parse(localUser));
@@ -89,16 +100,67 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
       });
   };
 
-  const createQuote = async (quoteInfo: QuoteInput, token: string) => {
+  const createQuote = async (quoteInfo: QuoteInput) => {
     const newQuote: Quote = {
       ...quoteInfo,
-      quoteKey: generateQuoteKey(quoteInfo.category),
+      quoteKey: generateQuoteKey(quoteList, quoteInfo.category),
       creatorId: activeUser?.username || "",
     };
+    const token = activeUser?.token || "";
+
+    console.log(newQuote)
+
+    await postNewQuote(newQuote, token)
+      .then(() => {
+        getQuotes();
+        toast.success("Created quote successfully!")
+      })
+      .catch((err) => {
+        console.log(err);
+        const errorResponse = err.response.data.error;
+        console.log(errorResponse)
+        toast.error("Error creating quote")
+      });
+  };
+
+  // STILL NEED WORK
+  const trashQuote = async (quoteId: number, token: string) => {
+    await deleteQuote(quoteId, token).then((response) => {
+      console.log(response);
+    });
+  };
+
+  // favorites api handlers
+  const getUserFavorites = async (token: string) => {
+    await fetchFavorites(token).then((response) => {
+      console.log(response);
+    });
+  };
+
+  const addFavorite = async (
+    quoteKey: string,
+    username: string,
+    token: string
+  ) => {
+    const favorite = {
+      quoteId: quoteKey,
+      userId: username,
+    };
+
+    await postFavorite(favorite, token).then((response) => {
+      console.log(response);
+    });
+  };
+
+  const removeFavorite = async (favoriteId: number, token: string) => {
+    await deleteFavorite(favoriteId, token).then((response) => {
+      console.log(response);
+    });
   };
 
   useEffect(() => {
     checkForLocalUser();
+    getQuotes();
   }, []);
 
   const providerValue = {
