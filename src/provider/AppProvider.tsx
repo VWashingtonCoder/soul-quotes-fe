@@ -5,7 +5,6 @@ import {
   UserLogin,
   UserToken,
   QuoteInfo,
-  QuoteInput,
   Quote,
   Favorite,
 } from "../types";
@@ -39,22 +38,6 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
   const [activeUser, setActiveUser] = useState<UserToken | null>(null);
   const [quoteList, setQuoteList] = useState<Quote[]>([]);
   const [userFavorites, setUserFavorites] = useState<Favorite[]>([]);
-
-  function generateQuoteKey(quotes: Quote[], category: string) {
-    console.log(quotes)
-    const categoryQuotes = quotes.filter(
-      (quote) => quote.category === category
-    );
-
-    // console.log(categoryQuotes)
-
-    if (categoryQuotes.length === 0) return "";
-
-    const lastQuoteKey = categoryQuotes[categoryQuotes.length - 1].quoteKey;
-    const lastQuoteKeyNum = Number(lastQuoteKey.replace(`${category}-`, ""));
-    const newQuoteKey = `${category}-${lastQuoteKeyNum + 1}`;
-    return newQuoteKey;
-  }
 
   const checkForLocalUser = () => {
     const localUser = localStorage.getItem("activeUser");
@@ -100,17 +83,12 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
       });
   };
 
-  const createQuote = async (quoteInfo: QuoteInput) => {
-    const newQuote: Quote = {
-      ...quoteInfo,
-      quoteKey: generateQuoteKey(quoteList, quoteInfo.category),
-      creatorId: activeUser?.username || "",
-    };
+  const createQuote = async (quote: Quote) => {
     const token = activeUser?.token || "";
 
-    console.log(newQuote)
+    console.log(quote)
 
-    await postNewQuote(newQuote, token)
+    await postNewQuote(quote, token)
       .then(() => {
         getQuotes();
         toast.success("Created quote successfully!")

@@ -27,8 +27,6 @@ export interface Quote {
   creatorId: string;
 }
 
-export type QuoteInput = Omit<Quote, "id" | "creatorId" | "quoteKey">;
-
 export interface Favorite {
   id?: number;
   quoteId: string;

@@ -1,6 +1,6 @@
 import axios from "axios";
 import { API_URL } from "./api";
-import { QuoteInput } from "../types";
+import { Quote } from "../types";
 
 const quotesApiUrl = `${API_URL}/quotes`;
 
@@ -14,7 +14,7 @@ export async function fetchQuotes() {
   }
 }
 
-export async function postNewQuote(quote: QuoteInput, token: string) {
+export async function postNewQuote(quote: Quote, token: string) {
   try {
     const response = await axios.post(quotesApiUrl, quote, {
       headers: {

@@ -1,6 +1,22 @@
 import { useApp } from "./provider/context-hooks";
 import "./App.css";
 import { useEffect } from "react";
+import { Quote } from "./types";
+
+function generateQuoteKey(quotes: Quote[], category: string) {
+  console.log(quotes)
+  const categoryQuotes = quotes.filter(
+    (quote) => quote.category === category
+  );
+
+  if (categoryQuotes.length === 0) return "";
+
+  const lastQuoteKey = categoryQuotes[categoryQuotes.length - 1].quoteKey;
+  const lastQuoteKeyNum = Number(lastQuoteKey.replace(`${category}-`, ""));
+  const newQuoteKey = `${category}-${lastQuoteKeyNum + 1}`;
+  return newQuoteKey;
+}
+
 
 function App() {
   const { activeUser, quoteList, userFavorites, loginActiveUser, createQuote } = useApp();
@@ -9,19 +25,16 @@ function App() {
     password: "Us3rB00k$",
   };
 
-  const newQuote = {
-    text: "a bird in the bush is better than a birs in the hand",
-    author: "Andre",
-    category: "funny",
-  };
-
+ 
   useEffect(() => {
-    createQuote(newQuote);
+    // loginActiveUser(user);
+    
+    console.log(activeUser);
+    // console.log(quoteList);
+    // console.log(userFavorites);
   }, []);
 
-  console.log(activeUser);
-  // console.log(quoteList);
-  // console.log(userFavorites);
+
 
   return (
     <>
