@@ -26,8 +26,7 @@ export async function postFavorite(favorite: Favorite, token: string) {
     });
     return response.data;
   } catch (error) {
-    console.log(error);
-    throw error;
+    throw (error as AxiosError).response;
   }
 }
 
@@ -40,7 +39,6 @@ export async function deleteFavorite(favoriteId: number, token: string) {
     });
     return response.data;
   } catch (error) {
-    console.log(error);
-    throw error;
+    throw (error as AxiosError).response;
   }
 }

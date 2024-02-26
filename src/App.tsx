@@ -2,7 +2,7 @@ import { useApp } from "./provider/context-hooks";
 import "./App.css";
 import { useEffect } from "react";
 import { Quote } from "./types";
-import { generateQuoteKey } from "./helpers";
+
 
 function App() {
   const {
@@ -10,18 +10,24 @@ function App() {
     userToken,
     quoteList,
     userFavorites,
-    getUserFavorites,
+    addFavorite,
   } = useApp();
 
   useEffect(() => {
     setTimeout(() => {
       console.log(`
-      activeUsername: ${activeUsername}
-      userToken: ${userToken}
-    `);
-      console.log(userFavorites);
-      console.log(quoteList);
-    }, 2500);
+        activeUsername: ${activeUsername}
+        userToken: ${userToken}
+      `)
+      console.log("quoteList: ", quoteList);
+      console.log("userFavorites: ", userFavorites);
+    }, 1000);
+
+    // addFavorite("funny-2")
+
+    setTimeout(() => {
+      // console.log("userFavorites: ", userFavorites);
+    }, 2000);
   }, []);
 
   return (

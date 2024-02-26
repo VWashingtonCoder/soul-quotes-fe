@@ -28,6 +28,7 @@ export interface AppContextInterface {
   getQuotes: () => void;
   createQuote: (quote: Quote) => void;
   trashQuote: (quoteId: number) => void;
+  addFavorite: (quoteKey: string) => void;
   // getFavorites: (token: string) => void;
   // createFavorite: (favorite: Favorite, token: string) => void;
   // trashFavorite: (favoriteId: number, token: string) => void;
@@ -165,21 +166,31 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
       });
   };
 
-  /* STILL NEED WORK
-  const addFavorite = async (
-    quoteKey: string,
-    username: string,
-    token: string
-  ) => {
+  const addFavorite = async (quoteKey: string) => {
     const favorite = {
       quoteId: quoteKey,
-      userId: username,
+      userId: activeUsername,
     };
 
-    await postFavorite(favorite, token).then((response) => {
-      console.log(response);
-    });
+    await postFavorite(favorite, userToken)
+      .then(() => {
+        getUserFavorites(userToken);
+        toast.success("Added to favorites!");
+      })
+      .catch((err) => {
+        console.error(err);
+        let errorResponse = err.data.error;
+
+        if (errorResponse === undefined)
+          errorResponse = "Error adding to favorites";
+        else if (err.status === 401) errorResponse = "Unauthorized";
+
+        toast.error(errorResponse);
+      });
   };
+
+  /* STILL NEED WORK
+
 
   const removeFavorite = async (favoriteId: number, token: string) => {
     await deleteFavorite(favoriteId, token).then((response) => {
@@ -188,10 +199,10 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
   };
 */
 
-useEffect(() => {
-  checkForLocalUser();
-  getQuotes();
-}, []);
+  useEffect(() => {
+    checkForLocalUser();
+    getQuotes();
+  }, []);
 
   const providerValue = {
     activeUsername,
@@ -203,6 +214,7 @@ useEffect(() => {
     getQuotes,
     createQuote,
     trashQuote,
+    addFavorite
   };
 
   return (
