@@ -1,4 +1,4 @@
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 import { API_URL } from "./api";
 import { Quote } from "../types";
 
@@ -9,8 +9,7 @@ export async function fetchQuotes() {
     const response = await axios.get(quotesApiUrl);
     return response.data;
   } catch (error) {
-    console.error(error);
-    throw new Error("Error fetching quotes");
+    throw (error as AxiosError).response;
   }
 }
 
@@ -23,8 +22,7 @@ export async function postNewQuote(quote: Quote, token: string) {
     });
     return response.data;
   } catch (error) {
-    console.error(error);
-    throw new Error("Error posting new quote");
+    throw (error as AxiosError).response;
   }
 }
 
@@ -37,7 +35,6 @@ export async function deleteQuote(quoteId: number, token: string) {
     });
     return response.data;
   } catch (error) {
-    console.error(error);
-    throw new Error("Error deleting quote");
+    throw (error as AxiosError).response;
   }
 }

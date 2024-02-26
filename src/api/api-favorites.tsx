@@ -1,4 +1,4 @@
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 import { API_URL } from "./api";
 import { Favorite } from "../types";
 
@@ -13,8 +13,7 @@ export async function fetchFavorites(token: string) {
     });
     return response.data;
   } catch (error) {
-    console.log(error);
-    throw error;
+    throw (error as AxiosError).response;
   }
 }
 

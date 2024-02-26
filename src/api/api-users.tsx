@@ -1,4 +1,4 @@
-import axios from "axios";
+import axios, { AxiosError }  from "axios";
 import { API_URL } from "./api";
 import { UserInput, UserLogin } from "../types"
 
@@ -9,8 +9,7 @@ export async function fetchUsers() {
     const response = await axios.get(usersApiUrl);
     return response.data;
   } catch (error) { 
-    console.log(error);
-    throw error;
+    throw((error as AxiosError).response);
   }
 }
 
@@ -19,8 +18,7 @@ export async function postNewUser(user: UserInput) {
     const response = await axios.post(`${usersApiUrl}/create`, user);
     return response.status;
   } catch (error) {
-    console.log(error);
-    throw error;
+    throw((error as AxiosError).response);
   }
 }
 
@@ -29,7 +27,6 @@ export async function loginUser(user: UserLogin) {
     const response = await axios.post(`${usersApiUrl}/login`, user);
     return response.data;
   } catch (error) { 
-    console.log(error);
-    throw error;
+    throw((error as AxiosError).response);
   }
 }
