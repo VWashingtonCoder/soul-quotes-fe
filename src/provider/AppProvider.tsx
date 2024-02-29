@@ -1,10 +1,8 @@
 import { ReactNode, createContext, useEffect, useState } from "react";
 import {
-  User,
   UserInput,
   UserLogin,
   UserToken,
-  QuoteInfo,
   Quote,
   Favorite,
 } from "../types";
@@ -16,7 +14,6 @@ import {
   deleteFavorite,
 } from "../api/api-favorites";
 import { toast } from "react-hot-toast";
-import { useEffectOnce } from "../helpers";
 
 export interface AppContextInterface {
   activeUsername: string;
@@ -29,9 +26,7 @@ export interface AppContextInterface {
   createQuote: (quote: Quote) => void;
   trashQuote: (quoteId: number) => void;
   addFavorite: (quoteKey: string) => void;
-  // getFavorites: (token: string) => void;
-  // createFavorite: (favorite: Favorite, token: string) => void;
-  // trashFavorite: (favoriteId: number, token: string) => void;
+  removeFavorite: (favoriteId: number) => void;
 }
 export const AppContext = createContext({} as AppContextInterface);
 
@@ -189,15 +184,24 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
       });
   };
 
-  /* STILL NEED WORK
+  const removeFavorite = async (favoriteId: number) => {
+    await deleteFavorite(favoriteId, userToken)
+      .then(() => {
+        getUserFavorites(userToken);
+        toast.success("Removed from favorites!");
+      })
+      .catch((err) => {
+        console.error(err);
 
+        let errorResponse = err.data.error;
 
-  const removeFavorite = async (favoriteId: number, token: string) => {
-    await deleteFavorite(favoriteId, token).then((response) => {
-      console.log(response);
-    });
+        if (errorResponse === undefined)
+          errorResponse = "Error adding to favorites";
+        else if (err.status === 401) errorResponse = "Unauthorized";
+
+        toast.error(errorResponse);
+      });
   };
-*/
 
   useEffect(() => {
     checkForLocalUser();
@@ -214,7 +218,8 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
     getQuotes,
     createQuote,
     trashQuote,
-    addFavorite
+    addFavorite,
+    removeFavorite,
   };
 
   return (
