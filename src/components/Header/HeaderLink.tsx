@@ -37,13 +37,13 @@ const HeaderLink = (props: HeaderLinkProps) => {
         </Link>
       )}
 
-      {activeUser && id === "account" && (
+      {activeUsername && id === "account" && (
         <Link to="/" className="nav-link" onClick={handleLogout}>
           Logout
         </Link>
       )}
 
-      {!activeUser && !isHomeLink && !isAccountLink && (
+      {!activeUsername && !isHomeLink && !isAccountLink && (
         <Link
           to={currentLocation}
           className="nav-link"
