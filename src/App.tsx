@@ -1,11 +1,15 @@
+import { Routes, Route } from "react-router-dom";
 import "./App.scss";
 import Header from "./components/Header/Header";
+import Home from "./components/Home/Home";
 
 function App() {
   return (
     <>
       <Header />
-      <h1>Soul Quotes App</h1>
+      <Routes>
+        <Route path="/" element={<Home />} />
+      </Routes>
     </>
   );
 }
