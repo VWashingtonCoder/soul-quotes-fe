@@ -21,6 +21,7 @@ export interface AppContextInterface {
   quoteList: Quote[];
   userFavorites: Favorite[];
   loginActiveUser: (user: UserLogin) => void;
+  logoutActiveUser: () => void;
   createUser: (user: UserInput) => void;
   getQuotes: () => void;
   createQuote: (quote: Quote) => void;
@@ -73,6 +74,13 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
         console.error(err);
         toast.error(errorResponse);
       });
+  };
+
+  const logoutActiveUser = () => {
+    setActiveUsername("");
+    setUserToken("");
+    setUserFavorites([]);
+    localStorage.removeItem("activeUser");
   };
 
   const createUser = async (user: UserInput) => {
@@ -214,6 +222,7 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
     quoteList,
     userFavorites,
     loginActiveUser,
+    logoutActiveUser,
     createUser,
     getQuotes,
     createQuote,
