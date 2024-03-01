@@ -1,17 +1,35 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useApp } from "../../provider/context-hooks";
 import SelectInput from "../shared/SelectInput";
 import ListTable from "../shared/ListTable";
+import { Quote } from "../../types";
 import "./Favorites.scss";
 
 function Favorites() {
   const { quoteList, userFavorites } = useApp();
   const [favoritesCategory, setFavoritesCategory] = useState("all");
-  
-  // const favoritesList =
-  //   favoritesCategory === "all"
-  //     ? userFavorites
-  //     : userFavorites.filter((quote) => quote.category === favoritesCategory);
+  const [favoriteQuotes, setFavoriteQuotes] = useState<Quote[]>([]);
+  const displayList =
+    favoritesCategory === "all"
+      ? favoriteQuotes
+      : favoriteQuotes.filter((quote) => quote.category === favoritesCategory);
+
+  const getFavoriteQuotes = () => {
+    const list = [] as Quote[];
+
+    userFavorites.forEach((favorite) => {
+      const quote = quoteList.find(
+        (quote) => quote.quoteKey === favorite.quoteId
+      );
+      if (quote) list.push(quote);
+    });
+
+    setFavoriteQuotes(list);
+  };
+
+  useEffect(() => {
+    getFavoriteQuotes();
+  }, [userFavorites, quoteList]);
 
   return (
     <section className="page favorites">
@@ -28,7 +46,7 @@ function Favorites() {
         />
       </div>
 
-      {/* <ListTable list={favoritesList} /> */}
+      <ListTable list={displayList} />
     </section>
   );
 }

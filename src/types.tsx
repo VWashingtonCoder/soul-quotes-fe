@@ -34,3 +34,5 @@ export interface Favorite {
   quoteId: string;
   userId: string;
 }
+
+export type FavoriteQuote = Omit<Favorite, "userId">;

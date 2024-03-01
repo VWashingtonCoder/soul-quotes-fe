@@ -7,6 +7,7 @@ import {
   UserToken,
   Quote,
   Favorite,
+  FavoriteQuote,
 } from "../types";
 import { fetchUsers, postNewUser, loginUser } from "../api/api-users";
 import { fetchQuotes, postNewQuote, deleteQuote } from "../api/api-quotes";
@@ -22,7 +23,7 @@ export interface AppContextInterface {
   userToken: string;
   userList: UserCheck[];
   quoteList: Quote[];
-  userFavorites: Favorite[];
+  userFavorites: FavoriteQuote[];
   loginActiveUser: (user: UserLogin) => void;
   logoutActiveUser: () => void;
   createUser: (user: UserInput) => void;
@@ -39,7 +40,7 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
   const [userToken, setUserToken] = useState<string>("");
   const [userList, setUserList] = useState<UserCheck[]>([]);
   const [quoteList, setQuoteList] = useState<Quote[]>([]);
-  const [userFavorites, setUserFavorites] = useState<Favorite[]>([]);
+  const [userFavorites, setUserFavorites] = useState<FavoriteQuote[]>([]);
 
   const getUserList = async () => {
     await fetchUsers()
@@ -181,7 +182,10 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
   const getUserFavorites = async (token: string) => {
     await fetchFavorites(token)
       .then((response) => {
-        setUserFavorites(response.favorites);
+        const favoriteQuote = response.favorites.map((favorite: Favorite) => {
+          return { id: favorite.id, quoteId: favorite.quoteId };
+        });
+        setUserFavorites(favoriteQuote);
       })
       .catch((err) => {
         console.error(err);

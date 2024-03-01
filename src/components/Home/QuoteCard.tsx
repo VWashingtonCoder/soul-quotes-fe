@@ -18,14 +18,17 @@ const QuoteCard = (props: QuoteCardProps) => {
     addFavorite,
     removeFavorite,
   } = useApp();
-  
+
   const { quoteKey, text, category, author } = quote;
 
-  const favoriteCodes = userFavorites.map((favorite) => favorite.quoteId);
-  const isFavorite = favoriteCodes.includes(quoteKey);
-  const favoriteId =
-    userFavorites.find((favorite) => favorite.quoteId === quoteKey)?.id || 0;
-  const isCreator = activeUsername  === quote.creatorId;
+  const isFavorite = userFavorites.some(
+    (favorite) => favorite.quoteId === quoteKey
+  );
+  const favoriteId = userFavorites.find(
+    (favorite) => favorite.quoteId === quoteKey
+  )?.id;
+
+  const isCreator = activeUsername === quote.creatorId;
 
   const handleQuoteDelete = (id: number) => {
     trashQuote(id);
@@ -49,9 +52,7 @@ const QuoteCard = (props: QuoteCardProps) => {
               className="card-btn favorite"
               onClick={(e) => {
                 e.preventDefault();
-                isFavorite
-                  ? removeFavorite(favoriteId)
-                  : addFavorite(quoteKey);
+                isFavorite ? removeFavorite(favoriteId) : addFavorite(quoteKey);
               }}
             >
               {isFavorite ? <AiFillHeart /> : <AiOutlineHeart />}
