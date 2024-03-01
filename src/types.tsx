@@ -11,6 +11,8 @@ export interface UserInput {
   password: string;
 }
 
+export type UserCheck = Omit<UserInput, "password">;
+
 export interface UserToken {
   username: string;
   token: string;

@@ -4,7 +4,7 @@ import { fetchUsers } from "../../api/api-users";
 import ErrorsContainer from "../shared/ErrorsContainer";
 import TextInput from "../shared/TextInput";
 import PasswordInput from "../shared/PasswordInput";
-import { UserInput } from "../../types";
+import { UserInput, UserCheck } from "../../types";
 
 type JoinFormValues = {
   [username: string]: string;
@@ -28,7 +28,7 @@ const joinInputs = [
 ];
 
 function JoinForm() {
-  const { createUser } = useApp();
+  const { createUser, userList } = useApp();
   const [formValues, setFormValues] = useState<JoinFormValues>(
     initialJoinFormValues
   );
@@ -37,41 +37,32 @@ function JoinForm() {
   const [showPassword, setShowPassword] = useState<boolean>(false);
   const [showConfirmPassword, setShowConfirmPassword] =
     useState<boolean>(false);
-  const disabled =
-    !username ||
-    !email ||
-    !password ||
-    !confirmPassword;
+  const disabled = !username || !email || !password || !confirmPassword;
 
-  async function validateFormValues() {
+  function validateFormValues() {
     const { username, email, password, confirmPassword } = formValues;
     const emailRegex = /^\S+@\S+\.\S+$/;
     const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,20}$/;
     const errors = {} as JoinFormValues;
 
-    await fetchUsers().then((users) => {
-     console.log(users)
-    });
 
+      if (userList.find((user: UserCheck) => user.username === username) !== undefined)
+        errors.username = "Username already exists";
+      else if (username.trim().length < 2)
+        errors.username = "Username must contain at least 2 characters";
 
+      if (userList.find((user: UserCheck) => user.email === email) !== undefined)
+        errors.email = "Email already exists";
+      else if (!emailRegex.test(email)) errors.email = "Email is invalid";
 
-    // if (users.find((user) => user.username === username) !== undefined)
-    //   errors.username = "Username already exists";
-    // else if (username.trim().length < 2)
-    //   errors.username = "Username must contain at least 2 characters";
+    if (!passwordRegex.test(password))
+      errors.password =
+        "Password must be between 8-20 characters long and contain at least one letter and one number";
 
-    // if (users.find((user) => user.email === email) !== undefined)
-    //   errors.email = "Email already exists";
-    // else if (!emailRegex.test(email)) errors.email = "Email is invalid";
+    if (password !== confirmPassword)
+      errors.confirmPassword = "Passwords do not match";
 
-    // if (!passwordRegex.test(password))
-    //   errors.password =
-    //     "Password must be between 8-20 characters long and contain at least one letter and one number";
-
-    // if (password !== confirmPassword)
-    //   errors.confirmPassword = "Passwords do not match";
-
-    // return errors;
+    return errors;
   }
 
   const updateForm = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -89,7 +80,7 @@ function JoinForm() {
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    // const errors = validateFormValues();
+    const errors = validateFormValues();
 
     if (Object.keys(errors).length === 0) {
       const newUser: UserInput = {
@@ -103,7 +94,7 @@ function JoinForm() {
       setShowConfirmPassword(false);
     }
 
-    // setErrors(errors);
+    setErrors(errors);
   };
 
   return (
@@ -123,7 +114,7 @@ function JoinForm() {
         />
       )}
 
-      <div className="inputs-group">
+      <div className="inputs-group" key="input-group">
         {joinInputs.map((input) => {
           const { id, label, type } = input;
           const value = formValues[id] as string;

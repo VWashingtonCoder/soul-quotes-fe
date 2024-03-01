@@ -1,12 +1,14 @@
 import { ReactNode, createContext, useEffect, useState } from "react";
 import {
+  User,
+  UserCheck,
   UserInput,
   UserLogin,
   UserToken,
   Quote,
   Favorite,
 } from "../types";
-import { postNewUser, loginUser } from "../api/api-users";
+import { fetchUsers, postNewUser, loginUser } from "../api/api-users";
 import { fetchQuotes, postNewQuote, deleteQuote } from "../api/api-quotes";
 import {
   fetchFavorites,
@@ -18,6 +20,7 @@ import { toast } from "react-hot-toast";
 export interface AppContextInterface {
   activeUsername: string;
   userToken: string;
+  userList: UserCheck[];
   quoteList: Quote[];
   userFavorites: Favorite[];
   loginActiveUser: (user: UserLogin) => void;
@@ -34,8 +37,31 @@ export const AppContext = createContext({} as AppContextInterface);
 export const AppProvider = ({ children }: { children: ReactNode }) => {
   const [activeUsername, setActiveUsername] = useState<string>("");
   const [userToken, setUserToken] = useState<string>("");
+  const [userList, setUserList] = useState<UserCheck[]>([]);
   const [quoteList, setQuoteList] = useState<Quote[]>([]);
   const [userFavorites, setUserFavorites] = useState<Favorite[]>([]);
+
+  const getUserList = async () => {
+    await fetchUsers()
+      .then((response) => {
+        const list = [] as UserCheck[];
+        response.users.forEach((user: User) => {
+          const { username, email } = user;
+          list.push({ username, email });
+        });
+        setUserList(list);
+      })
+      .catch((err) => {
+        let errorResponse = err.data.error;
+
+        if (errorResponse === undefined)
+          errorResponse = "Error fetching quotes";
+        else if (err.status === 401) errorResponse = "Unauthorized";
+
+        console.error(err);
+        toast.error(errorResponse);
+      });
+  };
 
   const checkForLocalUser = () => {
     const localUser = localStorage.getItem("activeUser");
@@ -87,6 +113,7 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
     await postNewUser(user)
       .then(() => {
         toast.success("User created successfully");
+        getUserList();
       })
       .catch((err) => {
         let errorResponse = err.data.error;
@@ -214,11 +241,13 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
   useEffect(() => {
     checkForLocalUser();
     getQuotes();
+    getUserList();
   }, []);
 
   const providerValue = {
     activeUsername,
     userToken,
+    userList,
     quoteList,
     userFavorites,
     loginActiveUser,
