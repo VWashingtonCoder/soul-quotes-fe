@@ -88,7 +88,6 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
         getUserFavorites(token);
         localStorage.setItem("activeUser", JSON.stringify(loggedInUser));
         toast.success(`Welcome back ${username}!`);
-        return true;
       })
       .catch((err) => {
         let errorResponse = err.data.error;
@@ -99,7 +98,6 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
 
         console.error(err);
         toast.error(errorResponse);
-        return false;
       });
   };
 

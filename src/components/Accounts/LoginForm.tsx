@@ -6,31 +6,28 @@ import PasswordInput from "../shared/PasswordInput";
 import { UserLogin } from "../../types";
 
 function LoginForm() {
-  const { userList, loginActiveUser, activeUsername } = useApp();
+  const { loginActiveUser } = useApp();
   const [username, setUsername] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [showPassword, setShowPassword] = useState<boolean>(false);
   const disabled = !username || !password;
 
-  function validateLoginInfo (user: UserLogin) {
+  function validateLoginInfo(user: UserLogin) {
     const { username, password } = user;
     let error = "";
-  
-    if (username.length < 2)
-      error = "Username must be at least 3 characters!";
+
+    if (username.length < 2) error = "Username must be at least 3 characters!";
     else if (password.length < 5)
       error = "Password must be at least 5 characters!";
 
     return error;
-  } 
-
+  }
 
   const handleShowPassword = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     setShowPassword(!showPassword);
   };
 
-  
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const loginInfo = { username, password };
@@ -40,33 +37,12 @@ function LoginForm() {
       toast.error(invalidLogin);
       return;
     } else {
-      const loggedIn = loginActiveUser(loginInfo);
-
-      // figure out form reset parameters
+      loginActiveUser(loginInfo);
     }
-
-
-    // const user = users.find((user) => user.userId === userId);
-
-    // if (!user) {
-    //   toast.error("User not found!");
-    //   return;
-    // } else if (user.password !== password) {
-    //   toast.error("Password is incorrect!");
-    //   return;
-    // } else {
-    //   loginActiveUser(user);
-    //   setUserId("");
-    //   setPassword("");
-    //   toast.success(`Welcome back, ${user.userId}!`);
-    // }
   };
 
   return (
-    <form 
-      className="form login" 
-      // onSubmit={handleSubmit}
-    >
+    <form className="form login" onSubmit={handleSubmit}>
       <header>
         <h2 className="title">Welcome Back!</h2>
         <h3 className="subtitle">

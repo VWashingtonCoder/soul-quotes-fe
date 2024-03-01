@@ -1,10 +1,18 @@
-import { Outlet } from "react-router-dom";
+import { Outlet, useNavigate } from "react-router-dom";
 import { useApp } from "../../provider/context-hooks";
 import Navbar from "../shared/Navbar";
 import "./Account.scss";
+import { useEffect } from "react";
 
 function AccountNav() {
   const { activeUsername } = useApp();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (activeUsername) {
+      navigate("/");
+    }
+  }, [activeUsername, navigate]);
 
   return (
     <section className="page account">
