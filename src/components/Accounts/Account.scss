@@ -1,0 +1,27 @@
+.account.page {
+  text-transform: capitalize;
+
+  .loading-message {
+    font-size: 3rem;
+    font-weight: 700;
+    text-align: center;
+    margin-top: 10rem;
+  }
+
+  .navbar {
+    width: 12rem;
+  }
+
+  .form {
+    .form-input {
+      margin-bottom: 1.5rem;
+      display: grid;
+      max-width: 70%;
+
+      label {
+        font-size: 1.75rem;
+        margin-bottom: 0.5rem;
+      }
+    }
+  }
+} // end .account.page
