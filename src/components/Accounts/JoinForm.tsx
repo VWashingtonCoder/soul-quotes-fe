@@ -45,15 +45,17 @@ function JoinForm() {
     const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,20}$/;
     const errors = {} as JoinFormValues;
 
+    if (
+      userList.find((user: UserCheck) => user.username === username) !==
+      undefined
+    )
+      errors.username = "Username already exists";
+    else if (username.trim().length < 2)
+      errors.username = "Username must contain at least 2 characters";
 
-      if (userList.find((user: UserCheck) => user.username === username) !== undefined)
-        errors.username = "Username already exists";
-      else if (username.trim().length < 2)
-        errors.username = "Username must contain at least 2 characters";
-
-      if (userList.find((user: UserCheck) => user.email === email) !== undefined)
-        errors.email = "Email already exists";
-      else if (!emailRegex.test(email)) errors.email = "Email is invalid";
+    if (userList.find((user: UserCheck) => user.email === email) !== undefined)
+      errors.email = "Email already exists";
+    else if (!emailRegex.test(email)) errors.email = "Email is invalid";
 
     if (!passwordRegex.test(password))
       errors.password =
