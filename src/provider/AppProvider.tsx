@@ -61,6 +61,7 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
 
         console.error(err);
         toast.error(errorResponse);
+        return;
       });
   };
 
@@ -99,6 +100,7 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
 
         console.error(err);
         toast.error(errorResponse);
+        return;
       });
   };
 
@@ -124,6 +126,7 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
 
         console.error(err);
         toast.error(errorResponse);
+        return;
       });
   };
 
@@ -142,6 +145,7 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
 
         console.error(err);
         toast.error(errorResponse);
+        return;
       });
   };
 
@@ -150,6 +154,7 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
       .then(() => {
         getQuotes();
         toast.success("Created quote successfully!");
+        addFavorite(quote.quoteKey);
       })
       .catch((err) => {
         let errorMessage = err.status === 401 ? "Unauthorized" : err.data.error;
@@ -158,6 +163,7 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
 
         console.error(err);
         toast.error(errorMessage);
+        return;
       });
   };
 
@@ -175,6 +181,7 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
         else if (err.status === 401) errorResponse = "Unauthorized";
 
         toast.error(errorResponse);
+        return;
       });
   };
 
@@ -196,6 +203,7 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
         else if (err.status === 401) errorResponse = "Unauthorized";
 
         toast.error(errorResponse);
+        return;
       });
   };
 
@@ -219,6 +227,7 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
         else if (err.status === 401) errorResponse = "Unauthorized";
 
         toast.error(errorResponse);
+        return;
       });
   };
 
@@ -238,6 +247,7 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
         else if (err.status === 401) errorResponse = "Unauthorized";
 
         toast.error(errorResponse);
+        return;
       });
   };
 
