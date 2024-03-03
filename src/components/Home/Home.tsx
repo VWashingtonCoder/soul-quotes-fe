@@ -4,12 +4,11 @@ import SelectInput from "../shared/SelectInput";
 import QuoteCard from "./QuoteCard";
 import { Quote } from "../../types";
 import "./Home.scss";
+import { useEffectOnce } from "../../helpers";
 
 function Home() {
-  const { quoteList } = useApp();
-  const initialHomeQuotes = quoteList.slice(0, 3) as Quote[];
-
-  const [homeQuotes, setHomeQuotes] = useState(initialHomeQuotes);
+  const { quoteList, getQuotes } = useApp();
+  const [homeQuotes, setHomeQuotes] = useState([] as Quote[]);
   const [searchCategory, setSearchCategory] = useState("all");
   const categoryQuotes =
     searchCategory === "all"

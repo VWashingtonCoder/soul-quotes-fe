@@ -6,6 +6,7 @@ import AccountNav from "./components/Accounts/AccountNav";
 import JoinForm from "./components/Accounts/JoinForm";
 import LoginForm from "./components/Accounts/LoginForm";
 import Favorites from "./components/Favorites/Favorites";
+import CreateQuote from "./components/Create/CreateQuote";
 
 function App() {
   return (
@@ -18,6 +19,10 @@ function App() {
           <Route path="login" element={<LoginForm />} />
         </Route>
         <Route path="/favorites" element={<Favorites />} />
+        <Route path="/create-quote" element={<CreateQuote />}>
+          {/* <Route path="/create-quote/form" element={<CreateForm />} />
+          <Route path="/create-quote/list" element={<CreateList />} /> */}
+        </Route>
       </Routes>
     </>
   );
