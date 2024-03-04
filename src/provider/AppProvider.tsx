@@ -243,7 +243,7 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
         let errorResponse = err.data.error;
 
         if (errorResponse === undefined)
-          errorResponse = "Error adding to favorites";
+          errorResponse = "Error removing from favorites";
         else if (err.status === 401) errorResponse = "Unauthorized";
 
         toast.error(errorResponse);

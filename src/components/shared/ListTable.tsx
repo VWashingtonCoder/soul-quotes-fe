@@ -20,7 +20,7 @@ const ListTable = ({ list }: ListTableProps) => {
     if (quoteToDelete) {
       trashQuote(quoteToDelete.id as number);
     }
-    removeFavorite(favoriteId as number);
+    removeFavorite(Number(favoriteId));
   };
 
   return (
