@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { useApp } from "../../provider/context-hooks";
-import { fetchUsers } from "../../api/api-users";
 import ErrorsContainer from "../shared/ErrorsContainer";
 import TextInput from "../shared/TextInput";
 import PasswordInput from "../shared/PasswordInput";
@@ -122,7 +121,7 @@ function JoinForm() {
           const value = formValues[id] as string;
 
           return (
-            <>
+            <div key={id}>
               {type === "password" ? (
                 <PasswordInput
                   key={id}
@@ -143,7 +142,7 @@ function JoinForm() {
                   textChange={updateForm}
                 />
               )}
-            </>
+            </div>
           );
         })}
       </div>

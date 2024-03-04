@@ -15,12 +15,11 @@ const ListTable = ({ list }: ListTableProps) => {
     trashQuote,
   } = useApp();
 
-  const handleDelete = (quoteId: string, favoriteId: number) => {
+  const handleDelete = (quoteId: string) => {
     const quoteToDelete = quoteList.find((quote) => quote.quoteKey === quoteId);
     if (quoteToDelete) {
       trashQuote(quoteToDelete.id as number);
     }
-    removeFavorite(Number(favoriteId));
   };
 
   return (

@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const API_URL = "https://soul-quotes-api.fly.dev";
+export const API_URL = "https://soul-quotes-api.fly.dev";
 
 export async function serverTest() {
   axios

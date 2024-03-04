@@ -96,7 +96,6 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
 
         if (errorResponse === undefined)
           errorResponse = "Error fetching quotes";
-        else if (err.status === 401) errorResponse = "Unauthorized";
 
         console.error(err);
         toast.error(errorResponse);
@@ -181,7 +180,6 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
         else if (err.status === 401) errorResponse = "Unauthorized";
 
         toast.error(errorResponse);
-        return;
       });
   };
 
